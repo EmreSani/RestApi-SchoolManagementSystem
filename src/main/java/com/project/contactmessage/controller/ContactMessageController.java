@@ -2,7 +2,6 @@ package com.project.contactmessage.controller;
 
 import com.project.contactmessage.dto.ContactMessageRequest;
 import com.project.contactmessage.dto.ContactMessageResponse;
-import com.project.contactmessage.entity.ContactMessage;
 import com.project.contactmessage.service.ContactMessageService;
 import com.project.payload.response.business.ResponseMessage;
 import lombok.RequiredArgsConstructor;
@@ -13,6 +12,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -65,8 +65,18 @@ public class ContactMessageController {
         return contactMessageService.searchBySubject(subject, page, size, prop, direction);
     }
     // Not: searchByDateBetween ***************************************
+    @GetMapping("/searchByDate")
+    public Page<ContactMessageResponse> searchByDateBetween(
+            @RequestParam("startDateTime") LocalDateTime startDateTime,
+            @RequestParam("endDateTime") LocalDateTime endDateTime,
+            @RequestParam("page") int page,
+            @RequestParam("size") int size,
+            @RequestParam("sort") String prop,
+            @RequestParam("direction") Sort.Direction direction
+    ) {
+        return contactMessageService.searchByDateBetween(startDateTime, endDateTime, page, size, prop, direction);
+    }
 
-    // Not: searchByTimeBetween ***************************************
 
     // Not: *********************************** deleteByIdParam ***************************************
     @DeleteMapping("/query")

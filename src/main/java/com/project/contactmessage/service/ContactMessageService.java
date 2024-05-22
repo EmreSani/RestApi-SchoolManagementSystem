@@ -15,6 +15,9 @@ import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
+
+
 @Service
 @RequiredArgsConstructor
 public class ContactMessageService {
@@ -56,11 +59,13 @@ public class ContactMessageService {
         return contactMessageRepository.findBySubjectEquals(subject, pageable).map(createContactMessage::contactMessageToResponse);
     }
 
-
-
     // Not: searchByDateBetween ***************************************
+    public Page<ContactMessageResponse> searchByDateBetween(LocalDateTime startDateTime, LocalDateTime endDateTime, int page, int size, String prop, Sort.Direction direction) {
+        Pageable pageable = PageRequest.of(page, size, Sort.by(direction, prop));
+        return contactMessageRepository.findByDateTimeBetween(startDateTime, endDateTime, pageable).map(createContactMessage::contactMessageToResponse);
+    }
+    // Bu method zaten tarih ve zamanı aynı alanı kullandığı için `searchByTimeBetween` yerine sadece `searchByDateBetween` yeterli olacaktır.
 
-    // Not: searchByTimeBetween ***************************************
 
     //findContactById methodu oluşturup bu methodu silme işlemleri için kullanabiliriz
     public ContactMessage findContactMessage(Long id){
@@ -70,25 +75,15 @@ public class ContactMessageService {
 
     }
 
-    public ResponseMessage<ContactMessageResponse> ContactMessageToResponse(Long id){
-
-     ContactMessageResponse contactMessageResponse = createContactMessage.contactMessageToResponse(findContactMessage(id));
-
-     return ResponseMessage.<ContactMessageResponse>builder()
-             .message("Contact message found successfully")
-             .httpStatus(HttpStatus.OK)
-             .object(contactMessageResponse).build();
-
-    }
-
     // Not: *********************************** deleteByIdParam ***************************************
     public void deleteById(Long id) {
-        ContactMessage contactMessage = findContactMessage(id);
-        contactMessageRepository.deleteById(id); //böylece silmeye çalıştığımız contact message objesinin null olup olmaması kontrolleri sağlanmış oldu.
+        ContactMessage contactMessage = findContactMessage(id); //böylece silmeye çalıştığımız contact message objesinin null olup olmaması kontrolleri sağlanmış oldu.
+        contactMessageRepository.deleteById(id);
     }
 
+    // Not: ***************************************** deleteById ***************************************
     public ResponseMessage<ContactMessageResponse> deleteByIdPath(Long id) {
-        ContactMessage contactMessage = findContactMessage(id);
+        ContactMessage contactMessage = findContactMessage(id); //böylece silmeye çalıştığımız contact message objesinin null olup olmaması kontrolleri sağlanmış oldu.
         contactMessageRepository.deleteById(id);
 
         return ResponseMessage.<ContactMessageResponse>builder()
@@ -97,12 +92,21 @@ public class ContactMessageService {
                 .build();
     }
 
-    // Not: ***************************************** deleteById ***************************************
-
 
     // Not: *********************************** getByIdWithParam ***************************************
+    public ResponseMessage<ContactMessageResponse> ContactMessageToResponse(Long id){
+
+        ContactMessageResponse contactMessageResponse = createContactMessage.contactMessageToResponse(findContactMessage(id));
+
+        return ResponseMessage.<ContactMessageResponse>builder()
+                .message("Contact message found successfully")
+                .httpStatus(HttpStatus.OK)
+                .object(contactMessageResponse).build();
+
+    }
 
     // Not: ************************************ getByIdWithPath ***************************************
-
+    //99. satırdaki methodu 2 kere kullandım. Controllerdaki 2 ayrı istek tek bir methoda yönlendi çünkü zaten işlevleri aynı.
+    //Birisi id bilgisini requestparam ile requestten alıyor diğeri ise urldeki variable ile (path variable)
 
 }
