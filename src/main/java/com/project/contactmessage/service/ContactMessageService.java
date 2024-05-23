@@ -16,6 +16,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 
 @Service
@@ -55,8 +56,8 @@ public class ContactMessageService {
     // Not: *************************************** searchBySubjectByPage ***************************************
     public Page<ContactMessageResponse> searchBySubject(String subject, int page, int size, String prop, Sort.Direction direction) {
         Pageable pageable = PageRequest.of(page, size, Sort.by(direction, prop));
-
-        return contactMessageRepository.findBySubjectEquals(subject, pageable).map(createContactMessage::contactMessageToResponse);
+        Page<ContactMessage> contactMessagePage = contactMessageRepository.findBySubjectEquals(subject, pageable).orElseThrow(()-> new ResourceNotFoundException("Resource not found"));
+        return contactMessagePage.map(createContactMessage::contactMessageToResponse);
     }
 
     // Not: searchByDateBetween ***************************************
