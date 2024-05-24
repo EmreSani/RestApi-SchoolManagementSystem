@@ -4,7 +4,9 @@ import com.project.contactmessage.dto.ContactMessageRequest;
 import com.project.contactmessage.dto.ContactMessageResponse;
 import com.project.contactmessage.entity.ContactMessage;
 import com.project.contactmessage.mapper.ContactMessageMapper;
+import com.project.contactmessage.messages.Messages;
 import com.project.contactmessage.repository.ContactMessageRepository;
+import com.project.exception.ConflictException;
 import com.project.exception.ResourceNotFoundException;
 import com.project.payload.response.business.ResponseMessage;
 import lombok.RequiredArgsConstructor;
@@ -15,99 +17,95 @@ import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDateTime;
+import java.time.LocalDate;
+import java.time.format.DateTimeParseException;
 import java.util.List;
-
+import java.util.Objects;
 
 @Service
 @RequiredArgsConstructor
 public class ContactMessageService {
 
     private final ContactMessageRepository contactMessageRepository;
-    private final ContactMessageMapper createContactMessage;
+    private final ContactMessageMapper contactMessageMapper;
 
     public ResponseMessage<ContactMessageResponse> save(ContactMessageRequest contactMessageRequest) {
 
-        ContactMessage contactMessage = createContactMessage.requestToContactMessage(contactMessageRequest);
-        ContactMessage savedContactMessage = contactMessageRepository.save(contactMessage);
+        ContactMessage contactMessage = contactMessageMapper.requestToContactMessage(contactMessageRequest);
+        ContactMessage savedData = contactMessageRepository.save(contactMessage);
+
         return ResponseMessage.<ContactMessageResponse>builder()
                 .message("Contact Message Created Successfully")
-                .httpStatus(HttpStatus.CREATED)
-                .object(createContactMessage.contactMessageToResponse(savedContactMessage))
+                .httpStatus(HttpStatus.CREATED) // 201
+                .object(contactMessageMapper.contactMessageToResponse(savedData))
                 .build();
     }
 
-    // Not: ******************************************** getAllByPage ***************************************
-    public Page<ContactMessageResponse> getAllByPage(int page, int size, String prop, Sort.Direction direction) {
+    public Page<ContactMessageResponse> getAll(int page, int size, String sort, String type) {
 
-        Pageable pageable = PageRequest.of(page, size, Sort.by(direction, prop));
+        Pageable pageable = PageRequest.of(page,size, Sort.by(sort).ascending());
+        if(Objects.equals(type, "desc")){
+            pageable = PageRequest.of(page,size, Sort.by(sort).descending());
+        }
 
-       return contactMessageRepository.findAll(pageable).map(createContactMessage::contactMessageToResponse);
-
+        return contactMessageRepository.findAll(pageable).map(contactMessageMapper::contactMessageToResponse);
     }
 
-    // Not: ************************************* searchByEmailByPage ***************************************
-    public Page<ContactMessageResponse> searchByEmail(String email, int page, int size, String prop, Sort.Direction direction) {
-    Pageable pageable = PageRequest.of(page,size, Sort.by(direction, prop));
+    public Page<ContactMessageResponse> searchByEmail(String email, int page, int size, String sort, String type) {
 
-    return contactMessageRepository.findByEmailEquals(email, pageable).map(createContactMessage::contactMessageToResponse);
+        Pageable pageable = PageRequest.of(page,size, Sort.by(sort).ascending());
+        if(Objects.equals(type, "desc")){
+            pageable = PageRequest.of(page,size, Sort.by(sort).descending());
+        }
+
+        return contactMessageRepository.findByEmailEquals(email, pageable).
+                map(contactMessageMapper::contactMessageToResponse);
     }
 
-    // Not: *************************************** searchBySubjectByPage ***************************************
-    public Page<ContactMessageResponse> searchBySubject(String subject, int page, int size, String prop, Sort.Direction direction) {
-        Pageable pageable = PageRequest.of(page, size, Sort.by(direction, prop));
-        Page<ContactMessage> contactMessagePage = contactMessageRepository.findBySubjectEquals(subject, pageable).orElseThrow(()-> new ResourceNotFoundException("Resource not found"));
-        return contactMessagePage.map(createContactMessage::contactMessageToResponse);
+    public String deleteById(Long id) {
+        getContactMessageById(id);
+        contactMessageRepository.deleteById(id);
+        return Messages.CONTACT_MESSAGE_DELETED_SUCCESSFULLY;
     }
 
-    // Not: searchByDateBetween ***************************************
-    public Page<ContactMessageResponse> searchByDateBetween(LocalDateTime startDateTime, LocalDateTime endDateTime, int page, int size, String prop, Sort.Direction direction) {
-        Pageable pageable = PageRequest.of(page, size, Sort.by(direction, prop));
-        return contactMessageRepository.findByDateTimeBetween(startDateTime, endDateTime, pageable).map(createContactMessage::contactMessageToResponse);
-    }
-    // Bu method zaten tarih ve zamanı aynı alanı kullandığı için `searchByTimeBetween` yerine sadece `searchByDateBetween` yeterli olacaktır.
-
-
-    //findContactById methodu oluşturup bu methodu silme işlemleri için kullanabiliriz
-    public ContactMessage findContactMessage(Long id){
-
+    public ContactMessage getContactMessageById(Long id){
         return contactMessageRepository.findById(id).orElseThrow(()->
-                new ResourceNotFoundException("Contact Message not found with id: "+ id));
-
+                new ResourceNotFoundException(Messages.NOT_FOUND_MESSAGE));
     }
 
-    // Not: *********************************** deleteByIdParam ***************************************
-    public void deleteById(Long id) {
-        ContactMessage contactMessage = findContactMessage(id); //böylece silmeye çalıştığımız contact message objesinin null olup olmaması kontrolleri sağlanmış oldu.
-        contactMessageRepository.deleteById(id);
+    public Page<ContactMessageResponse> searchBySubject(String subject, int page, int size, String sort, String type) {
+
+        Pageable pageable = PageRequest.of(page, size, Sort.by(sort).ascending());
+        if (Objects.equals(type, "desc")) {
+            pageable = PageRequest.of(page, size, Sort.by(sort).descending());
+        }
+        return contactMessageRepository.findBySubjectEquals(subject, pageable). // Derived
+                map(contactMessageMapper::contactMessageToResponse);
     }
 
-    // Not: ***************************************** deleteById ***************************************
-    public ResponseMessage<ContactMessageResponse> deleteByIdPath(Long id) {
-        ContactMessage contactMessage = findContactMessage(id); //böylece silmeye çalıştığımız contact message objesinin null olup olmaması kontrolleri sağlanmış oldu.
-        contactMessageRepository.deleteById(id);
+    public List<ContactMessage> searchBetweenDates(String beginDateString, String endDateString) {
 
-        return ResponseMessage.<ContactMessageResponse>builder()
-                .message("Contact message deleted succesfully")
-                .httpStatus(HttpStatus.OK)
-                .build();
+        try {
+            LocalDate beginDate = LocalDate.parse(beginDateString);
+            LocalDate endDate = LocalDate.parse(endDateString);
+            return contactMessageRepository.findMessagesBetweenDates(beginDate, endDate);
+        } catch (DateTimeParseException e) {
+            throw new ConflictException(Messages.WRONG_DATE_MESSAGE);
+        }
     }
 
 
-    // Not: *********************************** getByIdWithParam ***************************************
-    public ResponseMessage<ContactMessageResponse> ContactMessageToResponse(Long id){
+    public List<ContactMessage> searchBetweenTimes(String startHourString, String startMinuteString, String endHourString, String endMinuteString) {
 
-        ContactMessageResponse contactMessageResponse = createContactMessage.contactMessageToResponse(findContactMessage(id));
+        try {
+            int startHour = Integer.parseInt(startHourString);
+            int startMinute = Integer.parseInt(startMinuteString);
+            int endHour = Integer.parseInt(endHourString);
+            int endMinute = Integer.parseInt(endMinuteString);
 
-        return ResponseMessage.<ContactMessageResponse>builder()
-                .message("Contact message found successfully")
-                .httpStatus(HttpStatus.OK)
-                .object(contactMessageResponse).build();
-
+            return contactMessageRepository.findMessagesBetweenTimes(startHour,startMinute,endHour,endMinute);
+        } catch (NumberFormatException e) {
+            throw new ConflictException(Messages.WRONG_TIME_MESSAGE);
+        }
     }
-
-    // Not: ************************************ getByIdWithPath ***************************************
-    //99. satırdaki methodu 2 kere kullandım. Controllerdaki 2 ayrı istek tek bir methoda yönlendi çünkü zaten işlevleri aynı.
-    //Birisi id bilgisini requestparam ile requestten alıyor diğeri ise urldeki variable ile (path variable)
-
 }

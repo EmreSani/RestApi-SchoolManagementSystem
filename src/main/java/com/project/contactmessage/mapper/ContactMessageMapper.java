@@ -10,19 +10,7 @@ import java.time.LocalDateTime;
 @Component
 public class ContactMessageMapper {
 
-    //POJO TO DTO
-    public ContactMessageResponse contactMessageToResponse(ContactMessage contactMessage){
-
-        return ContactMessageResponse.builder()
-                .name(contactMessage.getName())
-                .subject(contactMessage.getSubject())
-                .message(contactMessage.getMessage())
-                .email(contactMessage.getEmail())
-                .dateTime(LocalDateTime.now()).build();
-
-    }
-
-    //DTO TO POJO
+    // !!! Request --> POJO
     public ContactMessage requestToContactMessage(ContactMessageRequest contactMessageRequest){
         return ContactMessage.builder()
                 .name(contactMessageRequest.getName())
@@ -33,4 +21,16 @@ public class ContactMessageMapper {
                 .build();
     }
 
+    // !!! pojo --> Response
+    public ContactMessageResponse contactMessageToResponse(ContactMessage contactMessage){
+
+        return ContactMessageResponse.builder()
+                .name(contactMessage.getName())
+                .subject(contactMessage.getSubject())
+                .message(contactMessage.getMessage())
+                .email(contactMessage.getEmail())
+                .dateTime(LocalDateTime.now())
+                .build();
+
+    }
 }
