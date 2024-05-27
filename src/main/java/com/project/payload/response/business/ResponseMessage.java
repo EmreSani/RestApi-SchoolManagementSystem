@@ -17,5 +17,4 @@ public class ResponseMessage<E> {
     private E object;
     private String message;
     private HttpStatus httpStatus;
-
 }
