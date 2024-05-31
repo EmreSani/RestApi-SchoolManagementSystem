@@ -182,10 +182,14 @@ public class UserService {
     // Not : getByName() ***************************************************************
     public List<UserResponse> getUserByName(String name) {
 
-        return userRepository.getUserByNameContaining(name)
+        return userRepository.getUserByNameContaining(name)//
                 .stream()
                 .map(userMapper::mapUserToUserResponse)
                 .collect(Collectors.toList()) ;
+    }
+
+    public long countAllAdmins(){
+        return userRepository.countAdmin(RoleType.ADMIN);
     }
 
 }

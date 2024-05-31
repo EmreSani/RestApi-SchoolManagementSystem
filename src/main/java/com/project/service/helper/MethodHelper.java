@@ -26,5 +26,24 @@ public class MethodHelper {
             throw new BadRequestException(ErrorMessages.NOT_PERMITTED_METHOD_MESSAGE);
         }
     }
+
+    //!!! isUserExistWithUsername
+    public User isUserExistByUsername(String username){
+
+        User user = userRepository.findByUsernameEquals(username);
+        if(user.getId() == null){
+            throw new ResourceNotFoundException(ErrorMessages.NOT_FOUND_USER_MESSAGE);
+        }
+
+        return user;
+    }
+
+    //!!! Advisor olma kontrolu
+    public void checkAdvisor(User user){
+        if(Boolean.FALSE.equals(user.getIsAdvisor())){
+            throw new ResourceNotFoundException(String.format(ErrorMessages.NOT_FOUND_ADVISOR_MESSAGE,
+                    user.getId()));
+        }
+    }
 }
 

@@ -2,6 +2,7 @@ package com.project.payload.mappers;
 
 import com.project.entity.concretes.user.User;
 import com.project.payload.request.abstracts.BaseUserRequest;
+import com.project.payload.request.user.TeacherRequest;
 import com.project.payload.request.user.UserRequest;
 import com.project.payload.response.user.StudentResponse;
 import com.project.payload.response.user.TeacherResponse;
@@ -97,5 +98,23 @@ public class UserMapper {
                 .gender(userRequest.getGender())
                 .email(userRequest.getEmail())
                 .build() ;
+    }
+
+    public User mapTeacherRequestToUser(TeacherRequest teacherRequest){
+
+        return User.builder()
+                .name(teacherRequest.getName())
+                .surname(teacherRequest.getSurname())
+                .ssn(teacherRequest.getSsn())
+                .username(teacherRequest.getUsername())
+                .birthDay(teacherRequest.getBirthDay())
+                .birthPlace(teacherRequest.getBirthPlace())
+                .password(teacherRequest.getPassword())
+                .phoneNumber(teacherRequest.getPhoneNumber())
+                .email(teacherRequest.getEmail())
+                .isAdvisor(teacherRequest.getIsAdvisorTeacher())
+                .built_in(teacherRequest.getBuiltIn())
+                .gender(teacherRequest.getGender())
+                .build();
     }
 }
