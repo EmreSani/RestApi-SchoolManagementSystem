@@ -29,11 +29,26 @@ public class TeacherController {
     }
 
     // Not: ODEVVV updateTeacherById() ***************************************************
+    @PreAuthorize("hasAnyAuthority('ADMIN','MANAGER','ASSISTANT_MANAGER')")
+    @PutMapping("/update/{userId}")  // http://localhost:8080/user/update/1
+    public ResponseMessage<TeacherResponse>updateTeacherForManagers(@RequestBody @Valid TeacherRequest teacherRequest,
+                                                                    @PathVariable Long userId){
+        return teacherService.updateTeacherForManagers(teacherRequest,userId);
+    }
 
     // Not: ODEVV SaveAdvisorTeacherByTeacherId() ****************************************
+    @PreAuthorize("hasAnyAuthority('ADMIN','MANAGER','ASSISTANT_MANAGER')")
+    @PatchMapping("/saveAdvisorTeacher/{teacherId}") // http://localhost:8080/teacher/saveAdvisorTeacher/1
+    public ResponseMessage<UserResponse> saveAdvisorTeacher (@PathVariable Long teacherId){
+        return teacherService.saveAdvisorTeacher(teacherId);
+    }
 
     // Not : ODEVV  deleteAdvisorTeacherById() *******************************************
-
+    @PreAuthorize("hasAnyAuthority('ADMIN','MANAGER','ASSISTANT_MANAGER')")
+    @DeleteMapping("/deleteAdvisorTeacherById/{id}")// http://localhost:8080/teacher/deleteAdvisorTeacherById/1
+    public ResponseMessage<UserResponse> deleteAdvisorTeacherById(@PathVariable Long id){
+        return teacherService.deleteAdvisorTeacherById(id);
+    }
 
 
     // Not: GetAllStudentByAdvisorUserName() **********************************************

@@ -12,7 +12,7 @@ import org.springframework.stereotype.Component;
 @RequiredArgsConstructor
 public class UniquePropertyValidator {
 
-    private UserRepository userRepository;
+    private final UserRepository userRepository;
 
     public void checkDuplicate(String username, String ssn, String phone, String email){
 
