@@ -11,8 +11,11 @@ import com.project.repository.user.UserRepository;
 import com.project.service.helper.MethodHelper;
 import com.project.service.validator.UniquePropertyValidator;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+
+import javax.servlet.http.HttpServletRequest;
 
 @Service
 @RequiredArgsConstructor
@@ -47,6 +50,69 @@ public class StudentService {
                 .build();
     }
 
+    public ResponseMessage<StudentResponse> updateStudentForStudents(StudentRequest studentRequest, HttpServletRequest httpServletRequest) {
+
+        String userName = (String) httpServletRequest.getAttribute("username");
+        methodHelper.isUserExistByUsername(userName);
+
+        User student = userRepository.findByUsername(userName);
+
+       if (!studentRequest.getUsername().equalsIgnoreCase(userName))
+       {
+           throw new RuntimeException();
+       }
+
+        // !!! built_in kontrolu built in öğrenci olur mu ki ?
+        methodHelper.checkBuiltIn(student);
+
+        // !!! unique kontrolu
+        uniquePropertyValidator.checkUniqueProperties(student, studentRequest);
+        //DTO TO POJO
+        User updatedStudent = userMapper.mapStudentRequestToUser(studentRequest);
+        updatedStudent.setPassword(passwordEncoder.encode(updatedStudent.getPassword()));
+  //      updatedStudent.setPassword(passwordEncoder.encode(studentRequest.getPassword()));
+
+        userRepository.save(updatedStudent);
+
+        String message = SuccessMessages.STUDENT_UPDATE;
+
+        return ResponseMessage.<StudentResponse>builder().message(message).httpStatus(HttpStatus.OK).object(userMapper.mapUserToStudentResponse(updatedStudent)).build();
+
+    }
+
+    public ResponseMessage<StudentResponse> updateStudent(StudentRequest studentRequest, Long studentId) {
+
+        User student = methodHelper.isUserExist(studentId);
+
+        // !!! bulit_in kontrolu
+        methodHelper.checkBuiltIn(student);
+        //!!! update isleminde gelen request de unique olmasi gereken eski datalar hic degismedi ise
+        // dublicate kontrolu yapmaya gerek yok :
+        uniquePropertyValidator.checkUniqueProperties(student, studentRequest);
+
+        //DTO TO POJO
+        User updatedStudent = userMapper.mapStudentRequestToUser(studentRequest);
+
+        updatedStudent.setPassword(passwordEncoder.encode(studentRequest.getPassword()));
+
+        userRepository.save(updatedStudent);
+
+        String message = SuccessMessages.USER_UPDATE;
+
+        return ResponseMessage.<StudentResponse>builder().message(message).httpStatus(HttpStatus.OK).object(userMapper.mapUserToStudentResponse(updatedStudent)).build();
+
+    }
+
+    public ResponseMessage<StudentResponse> changeActiveStatusOfStudent(Long studentId) {
+       User student = methodHelper.isUserExist(studentId);
+
+        student.setActive(!student.isActive());
+
+        return ResponseMessage.<StudentResponse>builder().message("students activity updated successfully")
+               .httpStatus(HttpStatus.OK)
+               .object(userMapper.mapUserToStudentResponse(student)).build();
+    }
+
     private int getLastNumber(){
         //DB de hıc ogrencı yoksa  ogrencı numarası olarak 1000 gonderıyoruz
         if(!userRepository.findStudent(RoleType.STUDENT)){
@@ -55,4 +121,7 @@ public class StudentService {
 
         return userRepository.getMaxStudentNumber() + 1 ;
     }
+
+
+
 }
