@@ -7,9 +7,6 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import javax.persistence.Column;
-import javax.persistence.EnumType;
-import javax.persistence.Enumerated;
 import javax.validation.constraints.NotNull;
 import java.time.LocalDate;
 
@@ -19,18 +16,20 @@ import java.time.LocalDate;
 @Builder(toBuilder = true)
 public class EducationTermRequest {
 
+
     @NotNull(message = "Education Term must not be empty")
     private Term term;
 
-    @NotNull(message = "Start Date must not be empty")
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
+    @NotNull(message ="Start Date must not be empty")
+    @JsonFormat(shape=JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
     private LocalDate startDate;
 
-    @NotNull(message = "End Date must not be empty")
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
+    @NotNull(message ="End Date must not be empty")
+    @JsonFormat(shape=JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
     private LocalDate endDate;
 
-    @NotNull(message = "Last registration date must not be empty")
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
+    @NotNull(message ="Last Registration Date must not be empty")
+    @JsonFormat(shape=JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
     private LocalDate lastRegistrationDate;
 }
+
