@@ -6,7 +6,6 @@ import com.project.payload.response.business.ResponseMessage;
 import com.project.service.business.EducationTermService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
-import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
@@ -54,21 +53,17 @@ public class EducationTermController {
     }
 
     // Not:ODEVVV deleteById ********************************
-    @PostMapping("/delete/{educationTermId}")// http://localhost:8080/educationTerms/delete + JSON + POST
-    @PreAuthorize("hasAnyAuthority('ADMIN','MANAGER')")
-    public ResponseMessage<String> deleteEducationTermById(@PathVariable Long educationTermId){
-
-       return educationTermService.deleteEducationTermById(educationTermId);
-
+    @PreAuthorize("hasAnyAuthority('ADMIN','MANAGER','ASSISTANT_MANAGER')")
+    @DeleteMapping("/delete/{id}") // http://localhost:8080/educationTerms/delete/1
+    public ResponseMessage<?>deleteEducationTermById(@PathVariable Long id){
+        return educationTermService.deleteEducationTermById(id);
     }
 
     //Not: ODEVVV UpdateById *********************************
-    @PostMapping("/update/{educationTermId}")// http://localhost:8080/educationTerms/update + JSON + POST
     @PreAuthorize("hasAnyAuthority('ADMIN','MANAGER')")
-    public ResponseMessage<EducationTermResponse> updateById(@RequestBody @Valid EducationTermRequest educationTermRequest ,@PathVariable Long educationTermId){
-
-        return educationTermService.updateEducationTermById(educationTermId, educationTermRequest);
-
+    @PutMapping("/update/{id}")// http://localhost:8080/educationTerms/update/1 + JSON
+    public ResponseMessage<EducationTermResponse>updateEducationTerm(@PathVariable Long id,
+                                                                     @RequestBody @Valid EducationTermRequest educationTermRequest ){
+        return educationTermService.updateEducationTerm(id,educationTermRequest);
     }
-
 }

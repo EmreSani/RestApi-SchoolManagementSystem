@@ -110,24 +110,39 @@ public class EducationTermService {
         return educationTermRepository.findAll(pageable).map(educationTermMapper::mapEducationTermToEducationTermResponse);
     }
 
-    public ResponseMessage<String> deleteEducationTermById(Long educationTermId) {
-        isEducationTermExist(educationTermId);
-
-        educationTermRepository.deleteById(educationTermId);
-
-        return ResponseMessage.<String>builder().message(SuccessMessages.EDUCATION_TERM_DELETE).
-                httpStatus(HttpStatus.NO_CONTENT).build();
+    // Not: deleteById() *********************************************************************
+    public ResponseMessage deleteEducationTermById(Long id){
+        isEducationTermExist(id);
+        educationTermRepository.deleteById(id);
+        //!!! SORU : EducationTerm silinince LessonProgramlar ne olacak, buraya onuda sileecek
+         // kodlar eklememiz gerekecek mi?? Hayir, EducationTerm entityde Cascade kullanildigi icin
+         // gerek yok..
+        return ResponseMessage.builder()
+                .message(SuccessMessages.EDUCATION_TERM_DELETE)
+                .httpStatus(HttpStatus.OK)
+                .build();
     }
 
-    public ResponseMessage<EducationTermResponse> updateEducationTermById
-            (Long educationTermId, EducationTermRequest educationTermRequest) {
-
-        educationTermRepository.delete(isEducationTermExist(educationTermId));
-
+    // Not: updateById() *********************************************************************
+    public ResponseMessage<EducationTermResponse>updateEducationTerm(Long id,EducationTermRequest educationTermRequest){
+        // !!! ıd var mı ???
+        isEducationTermExist(id);
+        // !!! gırılen tarıhler dogru mu ???
         validateEducationTermDates(educationTermRequest);
 
-        return saveEducationTerm(educationTermRequest);
+        EducationTerm educationTermUpdated =
+                educationTermRepository.save(
+                        educationTermMapper.mapEducationTermRequestToUpdatedEducationTerm(id,educationTermRequest));
 
+        return ResponseMessage.<EducationTermResponse>builder()
+                .message(SuccessMessages.EDUCATION_TERM_UPDATE)
+                .httpStatus(HttpStatus.OK)
+                .object(educationTermMapper.mapEducationTermToEducationTermResponse(educationTermUpdated))
+                .build();
+    }
+
+    public EducationTerm findEducationTermById(Long educationTermId){
+        return isEducationTermExist(educationTermId);
     }
 }
 
