@@ -36,4 +36,14 @@ public class LessonProgramMapper {
                 .lessonName(lessonProgram.getLessons())
                 .build();
     }
+
+    public LessonProgramResponse mapLessonProgramtoLessonProgramResponse(LessonProgram lessonProgram){
+        return LessonProgramResponse.builder()
+                .day(lessonProgram.getDay())
+                .startTime(lessonProgram.getStartTime())
+                .stopTime(lessonProgram.getStopTime())
+                .lessonProgramId(lessonProgram.getId())
+                .lessonName(lessonProgram.getLessons())
+                .build();
+    }
 }

@@ -5,6 +5,7 @@ import com.project.payload.response.business.LessonProgramResponse;
 import com.project.payload.response.business.ResponseMessage;
 import com.project.service.business.LessonProgramService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
@@ -34,6 +35,11 @@ public class LessonProgramController {
     }
 
     // Not : ( ODEV ) getById() *************************************************************
+    @GetMapping("/getById/{id}") //http://localhost:8080/lessonPrograms/getById/1
+    @PreAuthorize("hasAnyAuthority('ADMIN','MANAGER','ASSISTANT_MANAGER')")
+    public LessonProgramResponse getLessonProgramById(@PathVariable Long id){
+        return lessonProgramService.getLessonProgramById(id);
+    }
 
 
     //herhangi bir kullanici atamasi yapilmamis butun dersprogramlari getirecegiz
@@ -44,10 +50,29 @@ public class LessonProgramController {
     }
 
     // Not : (ODEV ) getAllLessonProgramAssigned() *************************************
+    @GetMapping("/getAllAssigned") //http://localhost:8080/lessonPrograms/getAllAssigned
+    @PreAuthorize("hasAnyAuthority('ADMIN','MANAGER','ASSISTANT_MANAGER','TEACHER','STUDENT')")
+    public List<LessonProgramResponse>getAllAssigned(){
+        return lessonProgramService.getAllAssigned();
+    }
 
     // Not : ( ODEV ) Delete() ********************************************************
+    @DeleteMapping("/delete/{id}") //http://localhost:8080/lessonPrograms/delete/1
+    @PreAuthorize("hasAnyAuthority('ADMIN','MANAGER','ASSISTANT_MANAGER')")
+    public ResponseMessage deleteLessonProgramById(@PathVariable Long id){
+        return lessonProgramService.deleteLessonProgramById(id);
+    }
 
     // Not : ( ODEV ) getAllWithPage() *************************************************
+    @GetMapping("/getAllLessonProgramByPage") // http://localhost:8080/lessonPrograms/getAllLessonProgramByPage?page=0&size=1&sort=id&type=desc
+    @PreAuthorize("hasAnyAuthority('ADMIN','MANAGER','ASSISTANT_MANAGER','TEACHER','STUDENT')")
+    public Page<LessonProgramResponse> getAllLessonProgramByPage (
+            @RequestParam(value = "page") int page,
+            @RequestParam(value = "size") int size,
+            @RequestParam(value = "sort") String sort,
+            @RequestParam(value = "type") String type){
+        return lessonProgramService.getAllLessonProgramByPage(page,size,sort,type);
+    }
 
 
     // bir Ogretmen kendine ait lessonProgramlari getiriyor
@@ -65,6 +90,4 @@ public class LessonProgramController {
 
         return lessonProgramService.getAllLessonProgramByUser(httpServletRequest);
     }
-
-
 }
