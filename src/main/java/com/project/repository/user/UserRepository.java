@@ -44,4 +44,7 @@ public interface UserRepository extends JpaRepository<User, Long> {
 
     @Query(value = "SELECT MAX (u.studentNumber) FROM User u")
     int getMaxStudentNumber();
+
+    @Query("SELECT u from User u where u.id IN :studentIds")
+    List<User> findByIdsEquals(Long[] studentIds);
 }

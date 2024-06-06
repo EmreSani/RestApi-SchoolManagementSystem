@@ -2,8 +2,6 @@ package com.project.payload.messages;
 
 public class ErrorMessages {
 
-
-
     private ErrorMessages() {
     }
 
@@ -38,7 +36,8 @@ public class ErrorMessages {
     public static final String NOT_FOUND_LESSON_PROGRAM_MESSAGE = "Error: Lesson program with this field %s not found";
 
     public static final String MEET_NOT_FOUND_MESSAGE = "Error: Meet with id %s not found";
+    public static final String MEET_HOURS_CONFLICT = "meet hours has conflict with existing meets";
 
-    public static final String NOT_FOUND_STUDENT_INFO = "STUDENT INFO NOT FOUND WITH ID %s";
+    public static final String STUDENT_INFO_NOT_FOUND = "Error: Student Info with id %d not found" ;
 
 }
