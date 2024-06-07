@@ -91,6 +91,16 @@ public class LessonProgramService {
         return lessonProgramMapper.mapLessonProgramtoLessonProgramResponse(isLessonProgramExistById(id));
     }
 
+    public Set<LessonProgram> getLessonProgramById(Set<Long> lessonIdSet){
+        Set<LessonProgram> lessonPrograms = lessonProgramRepository.getLessonProgramByLessonProgramIdList(lessonIdSet);
+
+        if(lessonPrograms.isEmpty()){
+            throw new ResourceNotFoundException(ErrorMessages.NOT_FOUND_LESSON_PROGRAM_MESSAGE_WITHOUT_ID_INFO);
+        }
+
+        return lessonPrograms;
+    }
+
     private LessonProgram isLessonProgramExistById(Long id){
         return lessonProgramRepository.findById(id)
                 .orElseThrow(()-> new ResourceNotFoundException(String.format(ErrorMessages.NOT_FOUND_LESSON_PROGRAM_MESSAGE,id)));

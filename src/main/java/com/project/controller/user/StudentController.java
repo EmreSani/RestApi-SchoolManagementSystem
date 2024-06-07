@@ -1,5 +1,6 @@
 package com.project.controller.user;
 
+import com.project.payload.request.business.ChooseLessonProgramWithId;
 import com.project.payload.request.user.StudentRequest;
 import com.project.payload.request.user.StudentRequestWithoutPassword;
 import com.project.payload.response.business.ResponseMessage;
@@ -29,7 +30,7 @@ public class StudentController {
 
     // Not: updateStudentForStudents() **********************************************************
     // !!! ogrencinin kendisini update etme islemi
-    @PatchMapping("/update")   // http://localhost:8080/user/updateStudent
+    @PatchMapping("/update")   // http://localhost:8080/student/updateStudent
     @PreAuthorize("hasAnyAuthority('STUDENT')")
     public ResponseEntity<String> updateStudent(@RequestBody @Valid
                                                     StudentRequestWithoutPassword studentRequestWithoutPassword,
@@ -38,7 +39,7 @@ public class StudentController {
     }
 
     // Not: updateStudent() **********************************************************
-    @PutMapping("/update/{userId}")   // http://localhost:8080/user/update/2
+    @PutMapping("/update/{userId}")   // http://localhost:8080/student/update/2
     @PreAuthorize("hasAnyAuthority('ADMIN','MANAGER','ASSISTANT_MANAGER')")
     public ResponseMessage<StudentResponse>updateStudentForManagers(
             @PathVariable Long userId,
@@ -47,10 +48,20 @@ public class StudentController {
     }
     // Not: ChangeActıveStatusOfStudent() ***********************************************
     @PreAuthorize("hasAnyAuthority('ADMIN','MANAGER','ASSISTANT_MANAGER')")
-    @GetMapping("/changeStatus") // /students/changeStatus?id=1&status=true
+    @GetMapping("/changeStatus") // http://localhost:8080/student/changeStatus?id=1&status=true
     public ResponseMessage changeStatusOfStudent (@RequestParam Long id, @RequestParam boolean status){
         return studentService.changeStatusOfStudent(id,status);
     }
-    // TODO : LESSON PROGRAM
+
+    // !!! Student kendine lessonProgram ekliyor
+    @PreAuthorize("hasAnyAuthority('STUDENT')")
+    @PostMapping("/addLessonProgramToStudent") // http://localhost:8080/student/addLessonProgramToStudent
+    public ResponseMessage<StudentResponse> addLessonProgram(HttpServletRequest request,
+                                                   @RequestBody @Valid ChooseLessonProgramWithId chooseLessonProgramWithId){
+        String userName = (String) request.getAttribute("username");
+
+        return studentService.addLessonProgramToStudent(userName, chooseLessonProgramWithId);
+    }
+
 
 }
