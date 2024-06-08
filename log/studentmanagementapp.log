@@ -1,31 +1,25 @@
-"2024-05-25 01:03:50,232 INFO  [main] com.project.SchoolManagementApplication:Starting SchoolManagementApplication using Java 17.0.11 on Emre-MacBook-Pro.local with PID 15003 (/Users/emresani/IdeaProjects/school-management/target/classes started by emresani in /Users/emresani/IdeaProjects/school-management)
-""2024-05-25 01:03:50,238 INFO  [main] com.project.SchoolManagementApplication:No active profile set, falling back to 1 default profile: "default"
-""2024-05-25 01:03:51,231 INFO  [main] org.springframework.data.repository.config.RepositoryConfigurationDelegate:Bootstrapping Spring Data JPA repositories in DEFAULT mode.
-""2024-05-25 01:03:51,303 INFO  [main] org.springframework.data.repository.config.RepositoryConfigurationDelegate:Finished Spring Data repository scanning in 61 ms. Found 1 JPA repository interfaces.
-""2024-05-25 01:03:52,038 INFO  [main] org.springframework.boot.web.embedded.tomcat.TomcatWebServer:Tomcat initialized with port(s): 8080 (http)
-""2024-05-25 01:03:52,045 INFO  [main] org.apache.catalina.core.StandardService:Starting service [Tomcat]
-""2024-05-25 01:03:52,046 INFO  [main] org.apache.catalina.core.StandardEngine:Starting Servlet engine: [Apache Tomcat/9.0.68]
-""2024-05-25 01:03:52,132 INFO  [main] org.apache.catalina.core.ContainerBase.[Tomcat].[localhost].[/]:Initializing Spring embedded WebApplicationContext
-""2024-05-25 01:03:52,134 INFO  [main] org.springframework.boot.web.servlet.context.ServletWebServerApplicationContext:Root WebApplicationContext: initialization completed in 1811 ms
-""2024-05-25 01:03:52,349 INFO  [main] org.hibernate.jpa.internal.util.LogHelper:HHH000204: Processing PersistenceUnitInfo [name: default]
-""2024-05-25 01:03:52,377 INFO  [main] org.hibernate.Version:HHH000412: Hibernate ORM core version 5.6.12.Final
-""2024-05-25 01:03:52,466 INFO  [main] org.hibernate.annotations.common.Version:HCANN000001: Hibernate Commons Annotations {5.1.2.Final}
-""2024-05-25 01:03:52,567 INFO  [main] com.zaxxer.hikari.HikariDataSource:HikariPool-1 - Starting...
-""2024-05-25 01:03:52,715 INFO  [main] com.zaxxer.hikari.HikariDataSource:HikariPool-1 - Start completed.
-""2024-05-25 01:03:52,726 INFO  [main] org.hibernate.dialect.Dialect:HHH000400: Using dialect: org.hibernate.dialect.PostgreSQL81Dialect
-""2024-05-25 01:03:53,534 INFO  [main] org.hibernate.engine.transaction.jta.platform.internal.JtaPlatformInitiator:HHH000490: Using JtaPlatform implementation: [org.hibernate.engine.transaction.jta.platform.internal.NoJtaPlatform]
-""2024-05-25 01:03:53,541 INFO  [main] org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean:Initialized JPA EntityManagerFactory for persistence unit 'default'
-""2024-05-25 01:03:54,043 WARN  [main] org.springframework.boot.autoconfigure.orm.jpa.JpaBaseConfiguration$JpaWebConfiguration:spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
-""2024-05-25 01:03:54,542 WARN  [main] org.springframework.boot.autoconfigure.security.servlet.UserDetailsServiceAutoConfiguration:
-
-Using generated security password: 3d8cfb0b-e1fb-41de-b15c-07defdb63f72
-
-This generated password is for development use only. Your security configuration must be updated before running your application in production.
-
-""2024-05-25 01:03:54,606 INFO  [main] org.springframework.security.web.DefaultSecurityFilterChain:Will secure any request with [org.springframework.security.web.session.DisableEncodeUrlFilter@22ea6051, org.springframework.security.web.context.request.async.WebAsyncManagerIntegrationFilter@539bb233, org.springframework.security.web.context.SecurityContextPersistenceFilter@55d87b73, org.springframework.security.web.header.HeaderWriterFilter@637c8632, org.springframework.security.web.csrf.CsrfFilter@4601a148, org.springframework.security.web.authentication.logout.LogoutFilter@69f24965, org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter@166a5659, org.springframework.security.web.authentication.ui.DefaultLoginPageGeneratingFilter@73230721, org.springframework.security.web.authentication.ui.DefaultLogoutPageGeneratingFilter@21b2579d, org.springframework.security.web.authentication.www.BasicAuthenticationFilter@49770ef9, org.springframework.security.web.savedrequest.RequestCacheAwareFilter@5b643d6e, org.springframework.security.web.servletapi.SecurityContextHolderAwareRequestFilter@34f8ce89, org.springframework.security.web.authentication.AnonymousAuthenticationFilter@87f1201, org.springframework.security.web.session.SessionManagementFilter@34001c5d, org.springframework.security.web.access.ExceptionTranslationFilter@57fec63f, org.springframework.security.web.access.intercept.FilterSecurityInterceptor@58fbfefb]
-""2024-05-25 01:03:54,668 INFO  [main] org.springframework.boot.web.embedded.tomcat.TomcatWebServer:Tomcat started on port(s): 8080 (http) with context path ''
-""2024-05-25 01:03:54,678 INFO  [main] com.project.SchoolManagementApplication:Started SchoolManagementApplication in 5.005 seconds (JVM running for 5.48)
-""2024-05-25 01:03:59,221 INFO  [SpringApplicationShutdownHook] org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean:Closing JPA EntityManagerFactory for persistence unit 'default'
-""2024-05-25 01:03:59,224 INFO  [SpringApplicationShutdownHook] com.zaxxer.hikari.HikariDataSource:HikariPool-1 - Shutdown initiated...
-""2024-05-25 01:03:59,227 INFO  [SpringApplicationShutdownHook] com.zaxxer.hikari.HikariDataSource:HikariPool-1 - Shutdown completed.
+"2024-06-08 01:16:55,191 INFO  [main] com.project.SchoolManagementApplication:Starting SchoolManagementApplication using Java 17.0.11 on Emre-MacBook-Pro.local with PID 67294 (/Users/emresani/IdeaProjects/school-management/target/classes started by emresani in /Users/emresani/IdeaProjects/school-management)
+""2024-06-08 01:16:55,199 INFO  [main] com.project.SchoolManagementApplication:No active profile set, falling back to 1 default profile: "default"
+""2024-06-08 01:16:56,406 INFO  [main] org.springframework.data.repository.config.RepositoryConfigurationDelegate:Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+""2024-06-08 01:16:56,542 INFO  [main] org.springframework.data.repository.config.RepositoryConfigurationDelegate:Finished Spring Data repository scanning in 128 ms. Found 8 JPA repository interfaces.
+""2024-06-08 01:16:57,346 INFO  [main] org.springframework.boot.web.embedded.tomcat.TomcatWebServer:Tomcat initialized with port(s): 8080 (http)
+""2024-06-08 01:16:57,353 INFO  [main] org.apache.catalina.core.StandardService:Starting service [Tomcat]
+""2024-06-08 01:16:57,353 INFO  [main] org.apache.catalina.core.StandardEngine:Starting Servlet engine: [Apache Tomcat/9.0.68]
+""2024-06-08 01:16:57,443 INFO  [main] org.apache.catalina.core.ContainerBase.[Tomcat].[localhost].[/]:Initializing Spring embedded WebApplicationContext
+""2024-06-08 01:16:57,444 INFO  [main] org.springframework.boot.web.servlet.context.ServletWebServerApplicationContext:Root WebApplicationContext: initialization completed in 2151 ms
+""2024-06-08 01:16:57,667 INFO  [main] org.hibernate.jpa.internal.util.LogHelper:HHH000204: Processing PersistenceUnitInfo [name: default]
+""2024-06-08 01:16:57,698 INFO  [main] org.hibernate.Version:HHH000412: Hibernate ORM core version 5.6.12.Final
+""2024-06-08 01:16:57,775 INFO  [main] org.hibernate.annotations.common.Version:HCANN000001: Hibernate Commons Annotations {5.1.2.Final}
+""2024-06-08 01:16:57,884 INFO  [main] com.zaxxer.hikari.HikariDataSource:HikariPool-1 - Starting...
+""2024-06-08 01:16:58,042 INFO  [main] com.zaxxer.hikari.HikariDataSource:HikariPool-1 - Start completed.
+""2024-06-08 01:16:58,052 INFO  [main] org.hibernate.dialect.Dialect:HHH000400: Using dialect: org.hibernate.dialect.PostgreSQL81Dialect
+""2024-06-08 01:16:59,114 INFO  [main] org.hibernate.engine.transaction.jta.platform.internal.JtaPlatformInitiator:HHH000490: Using JtaPlatform implementation: [org.hibernate.engine.transaction.jta.platform.internal.NoJtaPlatform]
+""2024-06-08 01:16:59,126 INFO  [main] org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean:Initialized JPA EntityManagerFactory for persistence unit 'default'
+""2024-06-08 01:17:00,344 WARN  [main] org.springframework.boot.autoconfigure.orm.jpa.JpaBaseConfiguration$JpaWebConfiguration:spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+""2024-06-08 01:17:01,313 INFO  [main] org.springframework.security.web.DefaultSecurityFilterChain:Will secure any request with [org.springframework.security.web.session.DisableEncodeUrlFilter@442151d1, org.springframework.security.web.context.request.async.WebAsyncManagerIntegrationFilter@aca2a0b, org.springframework.security.web.context.SecurityContextPersistenceFilter@6ae6a77b, org.springframework.security.web.header.HeaderWriterFilter@1a0b4955, org.springframework.web.filter.CorsFilter@79080255, org.springframework.security.web.authentication.logout.LogoutFilter@528c4353, com.project.security.jwt.AuthTokenFilter@857f1a7, org.springframework.security.web.savedrequest.RequestCacheAwareFilter@796e2187, org.springframework.security.web.servletapi.SecurityContextHolderAwareRequestFilter@632d1b1b, org.springframework.security.web.authentication.AnonymousAuthenticationFilter@2cdb53d6, org.springframework.security.web.session.SessionManagementFilter@48a21ea6, org.springframework.security.web.access.ExceptionTranslationFilter@1f235a0a, org.springframework.security.web.access.intercept.FilterSecurityInterceptor@62158618]
+""2024-06-08 01:17:01,589 INFO  [main] org.springframework.boot.web.embedded.tomcat.TomcatWebServer:Tomcat started on port(s): 8080 (http) with context path ''
+""2024-06-08 01:17:01,601 INFO  [main] com.project.SchoolManagementApplication:Started SchoolManagementApplication in 6.982 seconds (JVM running for 7.536)
+""2024-06-08 01:17:08,157 INFO  [SpringApplicationShutdownHook] org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean:Closing JPA EntityManagerFactory for persistence unit 'default'
+""2024-06-08 01:17:08,163 INFO  [SpringApplicationShutdownHook] com.zaxxer.hikari.HikariDataSource:HikariPool-1 - Shutdown initiated...
+""2024-06-08 01:17:08,166 INFO  [SpringApplicationShutdownHook] com.zaxxer.hikari.HikariDataSource:HikariPool-1 - Shutdown completed.
 "
