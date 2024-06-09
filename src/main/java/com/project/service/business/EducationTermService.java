@@ -86,6 +86,34 @@ public class EducationTermService {
         }
     }
 
+    private void validateEducationTermDatesForUpdate(EducationTermRequest educationTermRequest, Long id){
+
+        validateEducationTermDatesForRequest(educationTermRequest); // Yrd Method - 1
+
+        // !!! Bir yil icinde bir tane Guz donemi veya Yaz Donemi olmali kontrolu
+        if(educationTermRepository.existsByTermAndYear( // JPQL
+                educationTermRequest.getTerm(),educationTermRequest.getStartDate().getYear())){
+            throw new ResourceNotFoundException(
+                    ErrorMessages.EDUCATION_TERM_IS_ALREADY_EXIST_BY_TERM_AND_YEAR_MESSAGE);
+        }
+        // !!! yil icine eklencek educationTerm, mevcuttakilerin tarihleri ile cakismamali ****************************
+        if(educationTermRepository.findByYear(educationTermRequest.getStartDate().getYear())
+                .stream()
+                .filter(educationTerm -> !educationTerm.getId().equals(id)) // Mevcut eğitim dönemini hariç tut
+                .anyMatch(educationTerm ->
+                        (			educationTerm.getStartDate().equals(educationTermRequest.getStartDate()) //!!! 1. kontrol : baslama tarihleri ayni ise --> et1(10 kasim 2023) / YeniEt(10 kasim 2023)
+                                || (educationTerm.getStartDate().isBefore(educationTermRequest.getStartDate())//!!! 2. kontrol : baslama tarihi mevcuttun baslama ve bitis tarihi ortasinda ise -->
+                                && educationTerm.getEndDate().isAfter(educationTermRequest.getStartDate())) // Ornek : et1 ( baslama 10 kasim 20203 - bitme 20 kasim 20203)  - YeniEt ( baslama 15 kasim 2023 bitme 25 kasim 20203)
+                                || (educationTerm.getStartDate().isBefore(educationTermRequest.getEndDate()) //!!! 3. kontrol bitis tarihi mevcuttun baslama ve bitis tarihi ortasinda ise
+                                && educationTerm.getEndDate().isAfter(educationTermRequest.getEndDate()))// Ornek : et1 ( baslama 10 kasim 20203 - bitme 20 kasim 20203)  - YeniEt ( baslama 09 kasim 2023 bitme 15 kasim 20203)
+                                || (educationTerm.getStartDate().isAfter(educationTermRequest.getStartDate()) //!!!4.kontrol : yeni eklenecek eskiyi tamamen kapsiyorsa
+                                && educationTerm.getEndDate().isBefore(educationTermRequest.getEndDate()))//et1 ( baslama 10 kasim 20203 - bitme 20 kasim 20203)  - YeniEt ( baslama 09 kasim 2023 bitme 25 kasim 20203)
+                        ))
+        ) {
+            throw new BadRequestException(ErrorMessages.EDUCATION_TERM_CONFLICT_MESSAGE);
+        }
+    }
+
     public EducationTermResponse getEducationTermById(Long id) {
         EducationTerm term = isEducationTermExist(id);
         return educationTermMapper.mapEducationTermToEducationTermResponse(term);
@@ -128,7 +156,7 @@ public class EducationTermService {
         // !!! ıd var mı ???
         isEducationTermExist(id);
         // !!! gırılen tarıhler dogru mu ???
-        validateEducationTermDates(educationTermRequest);
+        validateEducationTermDatesForUpdate(educationTermRequest,id);
 
         EducationTerm educationTermUpdated =
                 educationTermRepository.save(

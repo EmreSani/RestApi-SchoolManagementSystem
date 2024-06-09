@@ -77,7 +77,9 @@ public class DateTimeValidator {
                             lessonProgram.getDay().name().equals(requestLessonProgramDay)
                                     && (lessonProgram.getStartTime().equals(requestStart) // lp1(sali 09:00) / lp2(sali 09:00)
                                     || (lessonProgram.getStartTime().isBefore(requestStart) && lessonProgram.getStopTime().isAfter(requestStart)) // lp1( Sali 09:00 - 11:00) / lp2 ( Sali 10:00- 12:00)
-                                    || (lessonProgram.getStartTime().isBefore(requestStop) && lessonProgram.getStopTime().isAfter(requestStop))
+                                    || (lessonProgram.getStartTime().isBefore(requestStop)
+                                    && (lessonProgram.getStopTime().isAfter(requestStop) || //bu satır ve alt satır bir arada
+                                    (lessonProgram.getStopTime().equals(requestStop)))) //ek kontrol eklendi (bitiş saatinin eşit olma durumu)
                                     || (lessonProgram.getStartTime().isAfter(requestStart) && lessonProgram.getStopTime().isBefore(requestStop))))) {
                 throw new BadRequestException(ErrorMessages.LESSON_PROGRAM_ALREADY_EXIST);
             }
