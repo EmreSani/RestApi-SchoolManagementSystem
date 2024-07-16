@@ -34,12 +34,5 @@ To use the API:
 3. Build and run the application using Maven.
 4. Access API endpoints to manage users, deans, vice-deans, students, teachers, lessons, meets, education terms, student information, and advisory teachers.
 
-## Contributions
-
-Contributions are welcome! Fork the repository and submit pull requests to improve functionality or fix issues.
-
-## License
-
-This project is licensed under the MIT License - see the LICENSE.md file for details.
-
-
+## Contributions and Feedback
+If you have any questions, suggestions for improvements, or encounter any issues, feel free to reach out. The code is available on my GitHub, and I’m open to feedback and collaboration.
